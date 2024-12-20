@@ -1,10 +1,7 @@
 rigol_vendor_bin is a command line utility to
 decode and encode the vendor.bin file from a Rigol oscilloscope
 
-Precompiled Linux, Windows and Android ARM64 binaries are available
-from 'Releases' section
-
-Rigol 'vendor.bin' encoder/decoder v1.2 - Zelea
+Rigol 'vendor.bin' encoder/decoder v1.2 - Zelea (modified by Norbert Kiszka)
 
 rigol_vendor_bin [options] [vendor_bin_file]
  - -M #    set scope model
@@ -21,7 +18,7 @@ Option strings require 'RKey.data' (or 'Key.data')
  - -d      debug switch
 
 Step-by-step guide:
- - Install adb on your linux or windows computer (if you haven't already)
+ - Install adb on your Linux computer (if you haven't already)
  - connect your scope to your local network and find its IP address then
  - adb connect IP:55555
  - adb -s IP:55555 pull /rigol/data/vendor.bin
