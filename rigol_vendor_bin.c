@@ -627,6 +627,7 @@ main( int argc, char *argv[] )
 				return 1;
 			}
 		}
+		free(buf);
 		printf("Done...\n");
 		return 0;
 		break;
