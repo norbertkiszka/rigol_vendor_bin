@@ -531,6 +531,7 @@ usage( char *progname )
       "\t-N #\tset serial number\n"
       "\t-a\trandom MAC address\n"
       "\t-A #\tset MAC address\n"
+	  "\t-G\tgenerate vendor.bin for all models\n"
       "\tOption strings require 'RKey.data' (or 'Key.data')\n"
       "\t-l\tlist available options\n"
       "\t-o\tgenerate all option strings for the current series\n"
@@ -545,6 +546,8 @@ main( int argc, char *argv[] )
 {
   char         *p, *vendor_bin, *vendor_enc, *vendor_dec;
   int           l, old, ret, option;
+  char        **pp;
+  char        *buf;
 
   fprintf( stderr, "\n%s v%s - %s\n", TITLE, VERSION, AUTHOR );
 
@@ -555,7 +558,7 @@ main( int argc, char *argv[] )
 
   do
   {
-    option = getopt( argc, argv, "hdM:nN:aA:gloO:" );
+    option = getopt( argc, argv, "hdM:nN:aA:gGloO:" );
     switch ( option )
     {
       case 'd':
@@ -607,6 +610,26 @@ main( int argc, char *argv[] )
       case 'h':
         usage( argv[0] );
         break;
+	  case 'G':
+		buf = malloc(1024); // Should be much more than longest model name
+		if(! buf)
+		{
+			fprintf( stderr, "malloc() failed\n");
+			return 1;
+		}
+		for( pp = scope_models; *pp; pp++ )
+		{
+			sprintf(buf, "AAA='%s' && ./rigol_vendor_bin -M $AAA && mkdir -p generated_ready_to_use/$AAA && mv vendor.enc generated_ready_to_use/$AAA/vendor.bin", *pp);
+			if(system(buf))
+			{
+				fprintf( stderr, "system() call failed for a model %s\n", *pp);
+				free(buf);
+				return 1;
+			}
+		}
+		printf("Done...\n");
+		return 0;
+		break;
       case EOF:                // no more options
         break;
       default:
